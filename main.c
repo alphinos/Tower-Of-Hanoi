@@ -86,7 +86,7 @@ void printGame(Tower *tower_vec){
 }
 
 void gamePlay(void){
-
+	// Let's play
   int towerOut, towerIn;
 
   Tower towers[qtdT];
