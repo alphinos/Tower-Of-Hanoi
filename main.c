@@ -87,6 +87,8 @@ void printGame(Tower *tower_vec){
 
 void gamePlay(void){
 	// Let's play
+	//Função que inicia o jogo
+
   int towerOut, towerIn;
 
   Tower towers[qtdT];
