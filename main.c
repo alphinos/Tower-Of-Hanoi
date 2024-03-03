@@ -4,52 +4,67 @@
 #define TRUE 1
 #define FALSE 0
 
-#define SIZE 7
-#define QTD_SPC SIZE - 1
-#define qtdT 3
+#define QTD_TORRE 3
+#define QTD_DISCOS 7
+#define QTD_SPC QTD_DISCOS-1
 
+//Define o Tipo Disco, que contém a posição na Torre e o ID, este último necessário para o tamanho do disco
 typedef struct disk{
-  int pos;
   int id;
 } Disk;
 
+//Define o Tipo Torre, contendo um ponteiro para o vetor de discos, o tamanho (quantidade de discos) e o tamanho atual
 typedef struct tower{
-  Disk *tower;
+  Disk *discos;
   int tam;
   int currentTAM;
 } Tower;
 
+//Cria a Torre com a Quantidade de Discos escolhida
 Tower createTower(int size){
   Tower t;
-  t.tower = (Disk*)malloc(size * sizeof(Disk));
+  t.discos = (Disk*)malloc(size * sizeof(Disk));
   t.tam = size;
   t.currentTAM = 0;
   return t;
 }
 
-void fulfillDisk(Tower *t){
+//Enche uma Torre com Todos os Discos
+void fullfillDisk(Tower *t){
   for (int i = 0; i < t->tam; i++){
-    Disk d = {i, t->tam - i};
-    t->tower[i] = d;
+    Disk d = {t->tam - i};
+    t->discos[i] = d;
   }
   t->currentTAM = t->tam;
 }
 
+//Esvazia Todas as Torres
+void clean_towers(Tower *towers){
+  for(int j=0; j<QTD_TORRE; j++){
+      for(int i=0; i<QTD_DISCOS; i++){
+        towers[j].discos[i].id = 0;
+    }
+  }
+}
+
+//Remove um Disco de uma Torre
 void removeDisk(Tower *t){
-  Disk O = {0, 0};
-  t->tower[t->currentTAM - 1] = O;
+  Disk O = {0};
+  t->discos[t->currentTAM - 1] = O;
   t->currentTAM--;
 }
 
+//Adiciona um disco à uma Torre
 void addDisk(Tower *t, Disk *newD){
   t->currentTAM++;
-  t->tower[t->currentTAM - 1] = *newD;
+  t->discos[t->currentTAM - 1] = *newD;
 }
 
-void moveDisk(Tower *last, Tower *dance){
-  Disk lastDisk = last->tower[last->currentTAM - 1];
-  removeDisk(last);
-  addDisk(dance, &lastDisk);
+//Move um Disco de uma Torre para a Outra
+void moveDisk(Tower *Out, Tower *In){
+  Disk lastDisk = Out->discos[Out->currentTAM - 1];
+  removeDisk(Out);
+  addDisk(In, &lastDisk);
 }
 
 void drawLine(int disco){
@@ -74,10 +89,10 @@ void drawLine(int disco){
 
 void printGame(Tower *tower_vec){
   printf("\n");
-  for (int i = SIZE-1; i > -1; i--){
-    for (int j = 0; j < qtdT; j++){ 
-      int disco = tower_vec[j].tower[i].id;
-      drawLine(disco);
+  for (int i =  QTD_DISCOS-1; i > -1; i--){
+    for (int j = 0; j < QTD_TORRE; j++){ 
+      int id_disco = tower_vec[j].discos[i].id;
+      drawLine(id_disco);
       printf("\t\t");
     }
     printf("\n");
@@ -91,16 +106,16 @@ void gamePlay(void){
 
   int towerOut, towerIn;
 
-  Tower towers[qtdT];
-  for (int i = 0; i < qtdT; i++){
-    towers[i] = createTower(SIZE);
+  Tower towers[QTD_TORRE];
+  for (int i = 0; i < QTD_TORRE; i++){
+    towers[i] = createTower(QTD_DISCOS);
   }
-  fulfillDisk(&towers[0]);
-  
+  clean_towers(towers);
+  fullfillDisk(&towers[0]);
   while (TRUE){
     printGame(towers);
-    printf("Coé, meu mano, move os discos da torre aí!\n");
-    printf("Escolha a Torre de Saída: ");
+    printf("Coeh, meu mano, move os discos da torre aih!\n");
+    printf("Escolha a Torre de Sada: ");
     scanf("%d", &towerOut);
     printf("Escolha a Torre de Entrada: ");
     scanf("%d", &towerIn);
