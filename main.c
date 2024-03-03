@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 #define TRUE 1
 #define FALSE 0
 
 #define QTD_TORRE 3
-#define QTD_DISCOS 7
+#define QTD_DISCOS 5
 #define QTD_SPC QTD_DISCOS-1
 
 //Define o Tipo Disco, que contém a posição na Torre e o ID, este último necessário para o tamanho do disco
@@ -61,10 +62,17 @@ void addDisk(Tower *t, Disk *newD){
 }
 
 //Move um Disco de uma Torre para a Outra
-void moveDisk(Tower *Out, Tower *In){
-  Disk lastDisk = Out->discos[Out->currentTAM - 1];
+int moveDisk(Tower *Out, Tower *In){
+  Disk lastDisk_out = Out->discos[Out->currentTAM - 1];
+  if(In->currentTAM != 0){
+    Disk lastDisk_in = In->discos[In->currentTAM-1];
+    if(lastDisk_out.id > lastDisk_in.id){
+      return FALSE;
+    }
+  }
   removeDisk(Out);
-  addDisk(In, &lastDisk);
+  addDisk(In, &lastDisk_out);
+  return TRUE;
 }
 
 void drawLine(int disco){
@@ -100,6 +108,13 @@ void printGame(Tower *tower_vec){
   printf("\n");
 }
 
+int verifica_win(Tower t){
+  if( t.currentTAM == QTD_DISCOS){
+    return TRUE;
+  }
+  return FALSE;
+}
+
 void gamePlay(void){
 	// Let's play
 	//Função que inicia o jogo
@@ -112,6 +127,8 @@ void gamePlay(void){
   }
   clean_towers(towers);
   fullfillDisk(&towers[0]);
+  
+  int quantidade_movimentos = 0;
   while (TRUE){
     printGame(towers);
     printf("Coeh, meu mano, move os discos da torre aih!\n");
@@ -119,8 +136,23 @@ void gamePlay(void){
     scanf("%d", &towerOut);
     printf("Escolha a Torre de Entrada: ");
     scanf("%d", &towerIn);
-    moveDisk(&towers[towerOut], &towers[towerIn]);    
+    system("cls");
+    int movement_validation = moveDisk(&towers[towerOut], &towers[towerIn]); 
+
+    quantidade_movimentos++; 
+    
+    int win_ = verifica_win(towers[QTD_TORRE-1]);
+
+    if(movement_validation == FALSE){
+      printf("MOvimento Invalido meu dog\n");
+    }  
+
+    if(win_ == TRUE){
+      break;
+    }
   }
+
+  printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!", QTD_DISCOS, quantidade_movimentos);
 }
 
 int main(void) {
