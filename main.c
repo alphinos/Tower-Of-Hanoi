@@ -151,7 +151,7 @@ void gamePlay(void){
     }  
 
     if(win_ == TRUE){
-      printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!", qtd_discos, quantidade_movimentos);
+      printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!\n", qtd_discos, quantidade_movimentos);
       break;
     }
   }
@@ -160,5 +160,5 @@ void gamePlay(void){
 
 int main(void) {
   gamePlay();
-  return 0;
+  system("pause");
 }
