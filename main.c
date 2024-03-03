@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <math.h>
 
 #define TRUE 1
 #define FALSE 0
@@ -147,11 +147,16 @@ void gamePlay(void){
     int win_ = verifica_win(towers[QTD_TORRE-1]);
 
     if(movement_validation == FALSE){
-      printf("MOvimento Invalido meu dog\n");
+      printf("Movimento Invalido meu dog\n");
     }  
 
     if(win_ == TRUE){
-      printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!\n", qtd_discos, quantidade_movimentos);
+      if(quantidade_movimentos == (int)pow(2, qtd_discos)-1){
+        printf("Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos! Quantidade de movimentos PERFEITA!\n", qtd_discos, quantidade_movimentos);
+      }
+      else{
+        printf("Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos! Mas ainda da pra resolver com menos movimentos, vc consegue?\n", qtd_discos, quantidade_movimentos);
+      }
       break;
     }
   }
