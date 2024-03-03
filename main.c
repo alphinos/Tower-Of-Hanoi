@@ -6,8 +6,7 @@
 #define FALSE 0
 
 #define QTD_TORRE 3
-#define QTD_DISCOS 5
-#define QTD_SPC QTD_DISCOS-1
+
 
 //Define o Tipo Disco, que contém a posição na Torre e o ID, este último necessário para o tamanho do disco
 typedef struct disk{
@@ -42,7 +41,7 @@ void fullfillDisk(Tower *t){
 //Esvazia Todas as Torres
 void clean_towers(Tower *towers){
   for(int j=0; j<QTD_TORRE; j++){
-      for(int i=0; i<QTD_DISCOS; i++){
+      for(int i=0; i<towers[0].tam; i++){
         towers[j].discos[i].id = 0;
     }
   }
@@ -75,7 +74,7 @@ int moveDisk(Tower *Out, Tower *In){
   return TRUE;
 }
 
-void drawLine(int disco){
+void drawLine(int disco, int QTD_SPC){
   if(disco == 0){
     for (int a = 0; a <= QTD_SPC - disco - 1; a++){
       printf(" ");
@@ -97,10 +96,10 @@ void drawLine(int disco){
 
 void printGame(Tower *tower_vec){
   printf("\n");
-  for (int i =  QTD_DISCOS-1; i > -1; i--){
+  for (int i =  tower_vec[0].tam-1; i > -1; i--){
     for (int j = 0; j < QTD_TORRE; j++){ 
       int id_disco = tower_vec[j].discos[i].id;
-      drawLine(id_disco);
+      drawLine(id_disco, tower_vec[0].tam-1);
       printf("\t\t");
     }
     printf("\n");
@@ -109,7 +108,7 @@ void printGame(Tower *tower_vec){
 }
 
 int verifica_win(Tower t){
-  if( t.currentTAM == QTD_DISCOS){
+  if( t.currentTAM == t.tam){
     return TRUE;
   }
   return FALSE;
@@ -120,10 +119,14 @@ void gamePlay(void){
 	//Função que inicia o jogo
 
   int towerOut, towerIn;
+  int qtd_discos;
+
+  printf("Fala meu dog, quer tentar a torre de Hanoi com quantos discos? \n");
+  scanf("%d", &qtd_discos);
 
   Tower towers[QTD_TORRE];
   for (int i = 0; i < QTD_TORRE; i++){
-    towers[i] = createTower(QTD_DISCOS);
+    towers[i] = createTower(qtd_discos);
   }
   clean_towers(towers);
   fullfillDisk(&towers[0]);
@@ -132,7 +135,7 @@ void gamePlay(void){
   while (TRUE){
     printGame(towers);
     printf("Coeh, meu mano, move os discos da torre aih!\n");
-    printf("Escolha a Torre de Sada: ");
+    printf("Escolha a Torre de Saihda: ");
     scanf("%d", &towerOut);
     printf("Escolha a Torre de Entrada: ");
     scanf("%d", &towerIn);
@@ -148,11 +151,11 @@ void gamePlay(void){
     }  
 
     if(win_ == TRUE){
+      printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!", qtd_discos, quantidade_movimentos);
       break;
     }
   }
 
-  printf("Oloco, meu PIT. Parabens, vc resolveu a torre de hanoi de %d Discos com %d movimentos!", QTD_DISCOS, quantidade_movimentos);
 }
 
 int main(void) {
